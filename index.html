@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Trollagem menor</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background-color: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #00ff00;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 2.5em;
+      user-select: none;
+    }
+    #message {
+      text-align: center;
+      white-space: nowrap;
+    }
+    @keyframes flicker {
+      0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; }
+      20%, 22%, 24%, 55% { opacity: 0; }
+    }
+    .flicker {
+      animation: flicker 1.5s infinite;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-10px) scale(1.05); }
+    }
+    .fun-text {
+      font-family: Arial, sans-serif;
+      font-size: 1em;
+      font-weight: bold;
+      animation: bounce 1s infinite;
+    }
+  </style>
+</head>
+<body>
+
+<div id="message">Clique para começar</div>
+
+<script>
+  const messageDiv = document.getElementById('message');
+  const trollPhrases = [
+    "😂 você foi trollado!",
+    "👻 pegadinhaaaa!",
+    "😎 hack nada kkk",
+    "🤣 só zoeira relaxa",
+    "🚫 não é vírus não!",
+    "😜 cuidado onde clica",
+    "😂 caiu certinho!",
+    "🙃 achou que era real né",
+    "🤡 pegou pesado kkk",
+    "😅 troll bem-sucedida 🎉"
+  ];
+
+  function glitchText(text) {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%&*';
+    return text.split('').map(c => {
+      if (Math.random() < 0.2 && c !== ' ') {
+        return chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return c;
+    }).join('');
+  }
+
+  function showAccessing() {
+    const baseText = "acessando câmeras...";
+    const flickerInterval = setInterval(() => {
+      messageDiv.textContent = glitchText(baseText);
+    }, 100);
+    messageDiv.style.color = '#00ff00';
+    messageDiv.style.fontSize = '2.5em';
+    messageDiv.classList.add('flicker');
+    messageDiv.classList.remove('fun-text');
+
+    setTimeout(() => {
+      clearInterval(flickerInterval);
+      messageDiv.classList.remove('flicker');
+      startTroll();
+    }, 3000);
+  }
+
+  function startTroll() {
+    let i = 0;
+    const bgColors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#00ffff', '#ff00ff', '#ffffff', '#000000'];
+
+    function nextPhrase() {
+      if (i >= trollPhrases.length) i = 0;
+
+      const bg = bgColors[Math.floor(Math.random() * bgColors.length)];
+      document.body.style.backgroundColor = bg;
+
+      const darkBackgrounds = ['#000000', '#0000ff', '#ff00ff'];
+      const textColor = darkBackgrounds.includes(bg) ? '#00ff00' : '#000000';
+
+      messageDiv.style.color = textColor;
+      messageDiv.textContent = trollPhrases[i];
+      messageDiv.classList.add('fun-text');
+      messageDiv.classList.add('flicker');
+
+      i++;
+    }
+
+    nextPhrase();
+    setInterval(nextPhrase, 1500);
+  }
+
+  document.body.addEventListener('click', () => {
+    messageDiv.textContent = "";
+    showAccessing();
+  }, { once: true });
+</script>
+
+</body>
+</html>
